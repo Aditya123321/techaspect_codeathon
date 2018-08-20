@@ -1,0 +1,132 @@
+#include<iostream.h>
+#include<conio.h>
+#include<fstream.h>
+#include<string.h>
+#include<ctype.h>
+#include<stdio.h>
+#include<process.h>
+class Blood_Bank  //class definition
+{
+  private:  char name[25];  // variable declaration with access specifier
+    int age;
+    char blood_group[3];
+    char address[30];
+    char email_id[20];
+    long long mobile_number;
+    char gender[6];
+    // class methods declaration with access specifier
+   public:  void get_details()  // this function will take the input from the user on call
+   {
+       cout<<"\n Enter the name of the donor: \t";
+       gets(name);
+       cout<<"\n Enter the age of the Donor: \t";
+       cin>>age;
+       cout<<"\nEnter the address of the donor: \t";
+       gets(address);
+       cout<<"\n Enter the email id of the donor: \t";
+       gets(email_id);
+       cout<<"\nEnter the mobile number: \t";
+       cin>>mobile_number;
+       cout<<"\n Enter the blood group: \t";
+       gets(blood_group);
+       cout<<"\n Enter the gender of the donor: \t";
+       gets(gender);
+   }
+	void display_details() // this function will show all the details on call
+	    {
+		cout<<"\n Name:\t"<<name;
+
+       cout<<"\n Age: \t"<<age;
+
+       cout<<"\n Address: \t"<<address;
+
+       cout<<"\n Email-id: \t"<<email_id;
+
+       cout<<"\n Mobile Number: \t"<<mobile_number;
+
+       cout<<"\n Blood Group:"<<blood_group;
+
+       cout<<"\n  Gender: \t "<<gender;
+
+	    };
+	    char* return_bg()
+	    {
+		return blood_group;
+	    }
+
+
+};
+fstream fp; // declaring an object of file type
+Blood_Bank bb;// declaring the object of class Blood_Bank type;
+
+void insertdata_file() // this function is responsible for inserting the donor data into the data(.dat) file
+{
+fp.open("donor_details.dat",ios::out|ios::app);//  .dat file stores data in binary format
+bb.get_details();
+fp.write((char*)&bb,sizeof(Blood_Bank));
+fp.close();
+cout<<"\n The data of the donor has been inserted";
+getch();
+}
+
+void retrievedata_file() //this function extracts all the information from the file
+{
+    fp.open("donor_details.dat",ios::out);
+    fp.read((char*)&bb,sizeof(Blood_Bank));
+	{
+	    bb.display_details();
+	}
+    fp.close();
+    getch();
+}
+
+void display_specific(char blood_gr[3]) // this function will extract the data of the donors based on the blood group
+	    {    // char check[3];
+
+		fp.open("donor_details.dat",ios::out);
+		fp.read((char*)&bb,sizeof(Blood_Bank));
+		{  //  check*=bb.return_bloodgroup();
+		    if(bb.return_bg()==blood_gr)
+		    {
+			bb.display_details();
+		    }
+		}
+		getch();
+
+	    }
+
+int main()
+{
+   int ch;
+    char bg[3];
+    int i;
+    clrscr();
+   do{
+	    cout<<"\n Choos your option";
+	    cout<<"\n1. Insert Donor Data";
+	    cout<<"\n2. View All Donors Data";
+	    cout<<"\n3. View Donor Data by Blood Group";
+	    cout<<"\n4. Exit";
+	    cin>>ch;
+	    switch(ch)
+	    {
+
+	    case 1: insertdata_file();
+		    break;
+
+	    case 2: retrievedata_file();
+		    break;
+
+	    case 3: cout<<"\n Enter the blood group";
+		    gets(bg);
+		    display_specific(bg);
+		    break;
+
+	    case 4: exit(0);
+	    }
+   }while(ch>=1 && ch<=4);
+
+   return 0;
+
+
+}
